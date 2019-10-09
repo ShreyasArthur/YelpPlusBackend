@@ -5,13 +5,10 @@ var mongoose = require('mongoose')
 
 // variables
 var app = express()
-var options = {
-    useNewUrlParser: true
-}
 var port = 4000
 
 // DB Connection
-mongoose.connect("mongodb://dom:njit1234@ds331558.mlab.com:31558/heroku_5hf0p9gc", options, function(error){
+mongoose.connect("mongodb://dom:njit1234@ds331558.mlab.com:31558/heroku_5hf0p9gc", {useNewUrlParser: true}, function(error){
     console.log(error)
 })
 
@@ -26,18 +23,18 @@ var userScehma = new mongoose.Schema({
 
 var user = mongoose.model("user", userScehma)
 
-var dom = new user({
-    first_name: "Justine",
-    last_name: "Ayroor",
-    email:"ja@gmail.com",
-    password: "1234",
-    isOwner: false
-})
+// var dom = new user({
+//     first_name: "Justine",
+//     last_name: "Ayroor",
+//     email:"ja@gmail.com",
+//     password: "1234",
+//     isOwner: false
+// })
 
-dom.save(function(err, user){
-    if(err) console.log(err)
-    else console.log("User inserted")
-})
+// dom.save(function(err, user){
+//     if(err) console.log(err)
+//     else console.log("User inserted")
+// })
 
 // routes
 app.get("/", function(req, res){
