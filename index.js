@@ -32,6 +32,11 @@ app.get("/", function(req, res){
     res.send("Welcome to the homepage")
 })
 
+// test route
+app.get("/test", function(req, res){
+    res.send({message: "Hello!"})
+})
+
 app.post("/registerUser", function(req, res){
     var user = new User({
         first_name  : req.body.first_name,
