@@ -34,7 +34,7 @@ app.get("/", function(req, res){
 
 // test route
 app.get("/test", function(req, res){
-    res.send({emailId: "dom@gmail.com", password: "1234"})
+    res.send([{emailId: "dom@gmail.com", password: "1234"}])
 })
 
 app.post("/registerUser", function(req, res){
