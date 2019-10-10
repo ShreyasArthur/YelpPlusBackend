@@ -1,0 +1,4 @@
+route               method          function
+/                   Get             Base page showing welcome message to check server condition
+/registerUser       Post            Create a new entry for a user in the db
+/loginUser          Post            Check if the user exists in db if yes then log him in else send error msg
