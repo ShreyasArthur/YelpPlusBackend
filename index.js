@@ -36,10 +36,11 @@ app.post("/registerUser", function(req, res){
         isOwner     : req.body.isOwner
     }, function(err, user){
         if(err) console.log("Something went wrong while registering user")
-        else console.log("User inserted")
+        else {
+            res.statusCode = 200
+            res.send(user)
+        }
     })
-    res.status(200)
-    res.send({status: "ok"})
 })
 
 // login route
