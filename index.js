@@ -37,7 +37,8 @@ app.post("/registerUser", function(req, res){
         if(err) console.log("Something went wrong while registering user")
         else console.log("User inserted")
     })
-    res.send("ok")
+    res.status(200)
+    res.send({status: "ok"})
 })
 
 // login route
