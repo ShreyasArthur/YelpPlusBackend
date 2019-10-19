@@ -28,19 +28,33 @@ app.get("/test", function(req, res){
 
 app.post("/registerUser", function(req, res){
     console.log(req.body)
-    User.create({
-        first_name  : req.body.first_name,
-        last_name   : req.body.last_name,
-        emailId       : req.body.emailId,
-        password    : req.body.password,
-        isOwner     : req.body.isOwner
+    User.findOne({
+        emailId: req.body.emailId
     }, function(err, user){
-        if(err) console.log("Something went wrong while registering user")
-        else {
-            res.statusCode = 200
-            res.send(user)
+        if(err) console.log("Something went wrong while registering")
+        else{
+            if(user == null){
+                User.create({
+                    first_name  : req.body.first_name,
+                    last_name   : req.body.last_name,
+                    emailId       : req.body.emailId,
+                    password    : req.body.password,
+                    isOwner     : req.body.isOwner
+                }, function(err, user){
+                    if(err) console.log("Something went wrong while registering user")
+                    else {
+                        res.statusCode = 200
+                        res.send(user)
+                    }
+                })
+            }else{
+                user = {}
+                user["authenticationStatus"] = false
+                res.send(user)
+            }
         }
     })
+
 })
 
 // login route
