@@ -31,7 +31,7 @@ app.post("/registerUser", function(req, res){
     User.create({
         first_name  : req.body.first_name,
         last_name   : req.body.last_name,
-        email       : req.body.email,
+        emailId       : req.body.emailId,
         password    : req.body.password,
         isOwner     : req.body.isOwner
     }, function(err, user){
@@ -46,11 +46,19 @@ app.post("/registerUser", function(req, res){
 // login route
 app.post("/loginUser", function(req, res){
     User.findOne({
-        email: req.body.email,
+        email: req.body.emailId,
         password: req.body.password 
     }, function(err, user){
         if(err) console.log("Something went wrong while logging in")
-        else res.send(user)    
+        else {
+            if(user != undefined){
+            user[message] = "User found"
+            res.send(user)
+            }else{
+                user[message] = "User not found"
+                res.send(user)
+            }
+        }    
     })
 })
 
