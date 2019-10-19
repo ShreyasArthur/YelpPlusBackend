@@ -55,6 +55,7 @@ app.post("/loginUser", function(req, res){
             user["message"] = "User found"
             res.send(user)
             }else{
+                user = {}
                 user["message"] = "User not found"
                 res.send(user)
             }
