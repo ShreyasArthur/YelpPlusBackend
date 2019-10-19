@@ -52,10 +52,10 @@ app.post("/loginUser", function(req, res){
         if(err) console.log("Something went wrong while logging in")
         else {
             if(user != undefined){
-            user[message] = "User found"
+            user["message"] = "User found"
             res.send(user)
             }else{
-                user[message] = "User not found"
+                user["message"] = "User not found"
                 res.send(user)
             }
         }    
