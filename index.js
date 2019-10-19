@@ -27,7 +27,6 @@ app.get("/test", function(req, res){
 })
 
 app.post("/registerUser", function(req, res){
-    console.log(req.body)
     User.findOne({
         emailId: req.body.emailId
     }, function(err, user){
