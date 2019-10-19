@@ -49,14 +49,15 @@ app.post("/loginUser", function(req, res){
         emailId: req.body.emailId,
         password: req.body.password 
     }, function(err, user){
-        if(err) console.log("Something went wrong while logging in")
-        else {
-            if(user != undefined){
-            user["message"] = "User found"
-            res.send(user)
+        if(err) {
+            console.log("Something went wrong while logging in")
+        }else {
+            if(user != null){
+                user["authenticationStatus"] = true
+                res.send(user)
             }else{
                 user = {}
-                user["message"] = "User not found"
+                user["authenticationStatus"] = false
                 res.send(user)
             }
         }    
