@@ -46,7 +46,7 @@ app.post("/registerUser", function(req, res){
 // login route
 app.post("/loginUser", function(req, res){
     User.findOne({
-        email: req.body.emailId,
+        emailId: req.body.emailId,
         password: req.body.password 
     }, function(err, user){
         if(err) console.log("Something went wrong while logging in")
