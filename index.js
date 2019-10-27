@@ -3,6 +3,10 @@ var express = require('express')
 var mongoose = require('mongoose')
 var bodyParser = require('body-parser')
 var User = require('./models/user')
+var Business = require("./models/business")
+var Category = require("./models/category")
+var SubCategory = require("./models/subCategory")
+var Review = require("./models/review")
 
 // variables
 var app = express()
@@ -15,10 +19,16 @@ mongoose.connect("mongodb://dom:njit1234@ds331558.mlab.com:31558/heroku_5hf0p9gc
 
 // middleware
 app.use(bodyParser.urlencoded({extended: true}))
+app.set("view engine", "ejs")
 
 // Routes
 app.get("/", function(req, res){
-    res.send("Welcome to the homepage")
+    Category.find({}, function(err, categories){
+        if(err) console.log(err)
+        else{
+            res.render("index", {categories: categories})
+        }
+    })
 })
 
 // test route
@@ -26,9 +36,20 @@ app.get("/test", function(req, res){
     res.send([{emailId: "dom@gmail.com", password: "1234"}])
 })
 
+// Route: Show Login Page
+app.get("/login", function(req, res){
+    res.render("login")
+})
+
+// Route: Show Register Page
+app.get("/register", function(req, res){
+    res.render("register")
+})
+
+// Route: Register User
 app.post("/registerUser", function(req, res){
     User.findOne({
-        emailId: req.body.emailId
+        email_id: req.body.email_id
     }, function(err, user){
         if(err) console.log("Something went wrong while registering")
         else{
@@ -36,9 +57,8 @@ app.post("/registerUser", function(req, res){
                 User.create({
                     first_name  : req.body.first_name,
                     last_name   : req.body.last_name,
-                    emailId       : req.body.emailId,
+                    email_id       : req.body.email_id,
                     password    : req.body.password,
-                    isOwner     : req.body.isOwner
                 }, function(err, user){
                     if(err) console.log("Something went wrong while registering user")
                     else {
@@ -56,10 +76,10 @@ app.post("/registerUser", function(req, res){
 
 })
 
-// login route
+// Route : Login
 app.post("/loginUser", function(req, res){
     User.findOne({
-        emailId: req.body.emailId,
+        email_id: req.body.email_id,
         password: req.body.password 
     }, function(err, user){
         if(err) {
@@ -74,6 +94,104 @@ app.post("/loginUser", function(req, res){
                 res.send(user)
             }
         }    
+    })
+})
+
+
+// Route: Add new business Page
+app.get("/business/new", function(req, res){
+    Category.find({}, function(err, categories){
+        if(err) console.log(err)
+        else {
+            SubCategory.find({}, function(err, subCategories){
+                if(err) console.log(err)
+                res.render("addBusiness", {categories: categories, subCategories: subCategories})
+            })
+        }
+    })
+})
+
+// Route: View All Business Page
+app.get("/show/:id", function(req, res){
+    Business.find({category: req.params.id}).populate("category").exec(function(err, businesses){
+        if(err) console.log(err)
+        else res.render("show", {businesses: businesses})
+    })
+})
+
+// Route: Insert New Business
+app.post("/business/new", function(req, res){
+    if(req.body.category == "Restaurants"){
+        sub_category = req.body.sub_category
+    }else{
+        sub_category = null
+    }
+    Business.create({
+        name: req.body.name,
+        address: req.body.address,
+        phone_number: req.body.phone_number,
+        image_logo: req.body.image_url,
+        category: req.body.category,
+        sub_category: sub_category
+    }, function(err, newBusiness){
+        if(err) console.log(err)
+        else res.redirect("/business/new")
+    })
+})
+
+// Route: View A Business Page
+app.get("/business/view/:id", function(req, res){
+    var id = req.params.id
+    Business.findById(id).populate("category").populate("review").exec(function(err, business){
+        res.render("viewBusiness", {business: business})
+    })
+})
+
+// Route: Add New Category
+app.post("/category/new", function(req, res){
+    Category.create({
+        name: req.body.name
+    }, function(err, newCategory){
+        if(err) console.log(newCategory)
+        else res.send(newCategory.name+" has been added successfully")
+    })
+})
+
+// Route: Add New Sub Category
+app.post("/subCategory/new", function(req, res){
+    SubCategory.create({
+        name: req.body.name
+    }, function(err, newSubCategory){
+        if(err) console.log(err)
+        else res.send(newSubCategory+" has been added successfully")
+    })
+})
+
+// Route: View add review Page
+app.get("/review/add/:id", function(req, res){
+    res.render("addReview", {business_id: req.params.id})
+})
+
+// Route: Add new review
+app.post("/review/new", function(req, res){
+    Review.create({
+        title: req.body.title,
+        description: req.body.description,
+        rating: req.body.rating
+    },function(err, newReview){
+        if(err) console.log(err)
+        else {
+            Business.findById(req.body.business_id, function(err, business){
+                if(err) console.log(err)
+                else{
+                    business.review.push(newReview)
+                    business.save(function(err, business){
+                        if(err) console.log(err)
+                        res.redirect("/business/view/"+business._id)
+                    })
+                }
+            })
+        }
     })
 })
 

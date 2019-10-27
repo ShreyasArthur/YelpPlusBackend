@@ -1,0 +1,10 @@
+Welcome to the homepage<br>
+Select a Category from below
+<ul>
+    <% categories.forEach(function(category){ %>
+        <li>
+            <a href="/show/<%=category._id%>"><%=category.name %></a>
+        </li>
+    <% }) %>
+</ul>
+<a href="/business/new">Add New Business</a>

@@ -1,0 +1,9 @@
+<% businesses.forEach(function(business){ %>
+    <img src="<%= business.image_logo %>"><br>
+    Business Name: <%= business.name %> <br>
+    Address: <%= business.address %> <br>
+    Phone Number: <%= business.phone_number %> <br>
+    Category: <%= business.category.name %> <br>
+    <a href="/business/view/<%=business.id %>">View</a>
+    <hr>
+<% }) %>

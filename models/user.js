@@ -3,9 +3,9 @@ var mongoose = require('mongoose')
 var userScehma = new mongoose.Schema({
     first_name: String,
     last_name: String,
-    emailId: String,
+    email_id: String,
     password: String,
-    isOwner: Boolean
+    reviews: [{type:mongoose.Schema.Types.ObjectId, ref:"Reviews"}],
 })
 
 var User = mongoose.model("User", userScehma)
