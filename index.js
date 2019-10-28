@@ -119,6 +119,15 @@ app.get("/show/:id", function(req, res){
     })
 })
 
+app.get("/show", function(req, res){
+    Business.find({}, function(err, business){
+        if(err) console.log(err)
+        else{
+            res.send(business)
+        }
+    })
+})
+
 // Route: Insert New Business
 app.post("/business/new", function(req, res){
     if(req.body.category == "Restaurants"){
