@@ -119,14 +119,7 @@ app.get("/show/:id", function(req, res){
     })
 })
 
-app.get("/show", function(req, res){
-    Business.find({}, function(err, business){
-        if(err) console.log(err)
-        else{
-            res.send(business)
-        }
-    })
-})
+
 
 // Route: Insert New Business
 app.post("/business/new", function(req, res){
@@ -144,7 +137,30 @@ app.post("/business/new", function(req, res){
         sub_category: sub_category
     }, function(err, newBusiness){
         if(err) console.log(err)
-        else res.redirect("/business/new")
+            res.redirect("/business/new")
+    })
+})
+
+// Route: Show add image page
+app.get("/business/new/images/:id", function(req, res){
+    res.render("addImage", {business_id: req.params.id})
+})
+
+// Route: Add images
+app.post("/business/new/images/:id", function(req, res){
+    Business.findById(req.params.id, function(err, business){
+        if(err) console.log(err)
+        else{
+            req.body.image_url.forEach(function(image){
+                if(image!="") business.photo.push(image)
+            })
+            business.save(function(err, business){
+                if(err) console.log(err)
+                else{
+                    res.redirect("/business/view/"+business._id)
+                }
+            })
+        }
     })
 })
 
@@ -152,14 +168,19 @@ app.post("/business/new", function(req, res){
 app.get("/business/view/:id", function(req, res){
     var id = req.params.id
     Business.findById(id).populate("category").populate("review").exec(function(err, business){
-        res.render("viewBusiness", {business: business})
+        if(err) console.log(err)
+        else {
+            console.log(business)
+            res.render("viewBusiness", {business: business})
+        }
     })
 })
 
 // Route: Add New Category
 app.post("/category/new", function(req, res){
     Category.create({
-        name: req.body.name
+        name: req.body.name,
+        image_url: req.body.image_url
     }, function(err, newCategory){
         if(err) console.log(newCategory)
         else res.send(newCategory.name+" has been added successfully")
@@ -203,6 +224,28 @@ app.post("/review/new", function(req, res){
         }
     })
 })
+
+  ////////////////////////
+ // Routes For Android //
+///////////////////////
+
+// Route : Get all businesss
+app.get("/business", function(req, res){
+    Business.find({}, function(err, business){
+        if(err) console.log(err)
+        else{
+            res.send(business)
+        }
+    })
+})
+
+app.get("/category", function(req, res){
+    Category.find({}, function(err, categories){
+        if(err) console.log(err)
+        else res.send(categories)
+    })
+})
+
 
 app.listen(port, function(){
     console.log("Server running on port:"+port)

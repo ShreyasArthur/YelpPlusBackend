@@ -1,9 +1,22 @@
+<% include ./partials/header %>
 <img src="<%= business.image_logo %>"><br>
 Business Name: <%= business.name %> <br>
 Address: <%= business.address %> <br>
 Phone Number: <%= business.phone_number %> <br>
 Category: <%= business.category.name %> <br>
 <a href="/review/add/<%=business.id %>">Add review</a><br>
+<a href="/business/new/images/<%= business.id %>">Add Photos</a><br>
+<hr>
+Business Photos: <br>
+<div class="row text-center" style="display: flex; flex-wrap: wrap;">
+    <% business.photo.forEach(function(p){ %>
+        <div class="col-md-3 col-sm-6">
+            <div class="thumbnail">
+                <img src="<%=p%>">
+            </div>
+        </div>
+    <% }) %>
+</div>  
 <hr>
 <% business.review.forEach(function(review){ %>
     title: <%= review.title%><br>
@@ -11,3 +24,5 @@ Category: <%= business.category.name %> <br>
     rating: <%= review.rating%>
 <hr>
 <% })%>
+
+<% include ./partials/footer %>
