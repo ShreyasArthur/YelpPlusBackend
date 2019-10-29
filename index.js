@@ -239,6 +239,16 @@ app.get("/business", function(req, res){
     })
 })
 
+// Route: Get business by category
+app.get("/business/:id", function(req, res){
+    Business.findById(req.params.id, function(err, res){
+        if(err) console.log(err)
+        else{
+            res.send(business)
+        }
+    })
+})
+
 app.get("/category", function(req, res){
     Category.find({}, function(err, categories){
         if(err) console.log(err)
