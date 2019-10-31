@@ -225,6 +225,7 @@ app.post("/review/new", function(req, res){
     })
 })
 
+
   ////////////////////////
  // Routes For Android //
 ///////////////////////
@@ -249,6 +250,7 @@ app.get("/business/:id", function(req, res){
     })
 })
 
+// Route: Get All Categories
 app.get("/category", function(req, res){
     Category.find({}, function(err, categories){
         if(err) console.log(err)
@@ -256,6 +258,37 @@ app.get("/category", function(req, res){
     })
 })
 
+// Route: Search for business
+app.get("/search/:word", function(req, res){
+    Category.findOne({name: req.params.word}, function(err, category){
+        if(err) console.log(err)
+        else{
+            if(category!=null){
+                Business.find({category: category._id}, function(err, business){
+                    if(err) console.log(err)
+                    else{
+                        if(business!=null){
+                            res.send(business)
+                        }else{
+                            res.send("Nothing found")
+                        }
+                    }
+                })
+            }else{ 
+                Business.find({$text: {$search: req.params.word}}).populate("category").exec(function(err, business){
+                    if(err) console.log(err)
+                    else{
+                        if(business!=null){
+                            res.send(business)
+                        }else{
+                            res.send("Nothing found")
+                        }
+                    }
+                })
+            }
+        }
+    })
+})
 
 app.listen(port, function(){
     console.log("Server running on port:"+port)

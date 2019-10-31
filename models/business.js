@@ -11,4 +11,8 @@ var businessSchema = new mongoose.Schema({
     sub_category: [{type: mongoose.Schema.Types.ObjectId, ref:"SubCategory"}]
 })
 
+businessSchema.index({
+    name: "text"
+})
+
 module.exports = mongoose.model("Business", businessSchema)
