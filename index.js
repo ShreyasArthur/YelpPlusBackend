@@ -260,11 +260,11 @@ app.get("/category", function(req, res){
 
 // Route: Search for business
 app.get("/search/:word", function(req, res){
-    Category.findOne({name: req.params.word}, function(err, category){
+    Category.findOne({$text: {$search: req.params.word}}, function(err, category){
         if(err) console.log(err)
         else{
             if(category!=null){
-                Business.find({category: category._id}, function(err, business){
+                Business.find({category: category._id}).populate("category").exec(function(err, business){
                     if(err) console.log(err)
                     else{
                         if(business!=null){
