@@ -80,8 +80,8 @@ app.post("/registerUser", function(req, res){
 app.post("/loginUser", function(req, res){
     User.findOne({
         email_id: req.body.email_id,
-        password: req.body.password 
-    }, function(err, user){
+        password: req.body.password,
+    },"first_name last_name email_id", function(err, user){
         if(err) {
             console.log("Something went wrong while logging in")
         }else {
