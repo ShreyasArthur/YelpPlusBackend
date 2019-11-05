@@ -350,7 +350,7 @@ app.get("/user/:email_id", function(req, res){
     findOne({email_id: req.params.email_id}).
     populate({
         path: "reviews", 
-        populate: {path: "business"}
+        // populate: {path: "business"}
     }).exec(function(err, user){
         if(err) console.log(err)
             res.send(user)
