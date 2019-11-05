@@ -10,7 +10,7 @@ var reviewSchema = new mongooose.Schema({
     ambience_rating: Number,
     price_rating: Number,
     photo: [String],
-    business: [{type:mongooose.Schema.Types.ObjectId, ref:"Business"}]
+    business: {type:mongooose.Schema.Types.ObjectId, ref:"Business"}
 })
 
 module.exports = mongooose.model("Review", reviewSchema)

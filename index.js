@@ -316,28 +316,16 @@ app.post("/review/:business_id/:email_id/new", function(req, res){
                 service_rating: req.body.service_rating,
                 ambience_rating: req.body.ambience_rating,
                 price_rating: req.body.price_rating,
-                date: Date.now()
+                date: Date.now(),
+                business: req.params.business_id
             },function(err, newReview){
                 if(err) console.log(err)
                 else {
                     user.reviews.push(newReview)
                     user.save(function(err){
                         if(err) console.log(err)
-                    })
-                    Business.findById(req.params.business_id, function(err, business){
-                        if(err) console.log(err)
-                        else{
-                            business.review.push(newReview)
-                            business.save(function(err, business){
-                                if(err) console.log(err)
-                                newReview.business.push(business)
-                                newReview.save(function(err){
-                                    if(err) console.log(err)
-                                })
-                                res.send("ok")
-                            })
-                        }
-                    })
+                    })   
+                    res.send("ok")
                 }
             })
         }
@@ -350,7 +338,7 @@ app.get("/user/:email_id", function(req, res){
     findOne({email_id: req.params.email_id}).
     populate({
         path: "reviews", 
-        // populate: {path: "business"}
+        populate: {path: "business"}
     }).exec(function(err, user){
         if(err) console.log(err)
             res.send(user)
