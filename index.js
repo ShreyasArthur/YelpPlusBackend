@@ -170,7 +170,6 @@ app.get("/business/view/:id", function(req, res){
     Business.findById(id).populate("category").populate("review").exec(function(err, business){
         if(err) console.log(err)
         else {
-            console.log(business)
             res.render("viewBusiness", {business: business})
         }
     })
@@ -207,7 +206,10 @@ app.post("/review/new", function(req, res){
     Review.create({
         title: req.body.title,
         description: req.body.description,
-        rating: req.body.rating
+        product_rating: req.body.product_rating,
+        service_rating: req.body.service_rating,
+        ambience_rating: req.body.ambience_rating,
+        price_rating: req.body.price_rating
     },function(err, newReview){
         if(err) console.log(err)
         else {
@@ -289,6 +291,73 @@ app.get("/search/:word", function(req, res){
         }
     })
 })
+
+// Route: Get a single business
+app.get("/business/show/:id", function(req, res){
+    var id = req.params.id
+    Business.findById(id).populate("category").populate("review").exec(function(err, business){
+        if(err) console.log(err)
+        else {
+            res.send(business)
+        }
+    })
+})
+
+// Route: Write a review
+app.post("/review/:business_id/:email_id/new", function(req, res){
+    User.findOne({email_id: req.params.email_id}, function(err, user){
+        if(err) console.log(err)
+        else{
+            Review.create({
+                author: user.first_name+" "+user.last_name,
+                title: req.body.title,
+                description: req.body.description,
+                product_rating: req.body.product_rating,
+                service_rating: req.body.service_rating,
+                ambience_rating: req.body.ambience_rating,
+                price_rating: req.body.price_rating,
+                date: Date.now()
+            },function(err, newReview){
+                if(err) console.log(err)
+                else {
+                    user.reviews.push(newReview)
+                    user.save(function(err){
+                        if(err) console.log(err)
+                    })
+                    Business.findById(req.params.business_id, function(err, business){
+                        if(err) console.log(err)
+                        else{
+                            business.review.push(newReview)
+                            business.save(function(err, business){
+                                if(err) console.log(err)
+                                newReview.business.push(business)
+                                newReview.save(function(err){
+                                    if(err) console.log(err)
+                                })
+                                res.send("ok")
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+// Route: Get User Profile
+app.get("/user/:email_id", function(req, res){
+    User.
+    findOne({email_id: req.params.email_id}).
+    populate({
+        path: "reviews", 
+        populate: {path: "business"}
+    }).exec(function(err, user){
+        if(err) console.log(err)
+            res.send(user)
+    })
+})
+
+// Claim a business
 
 app.listen(port, function(){
     console.log("Server running on port:"+port)

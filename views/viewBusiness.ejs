@@ -19,9 +19,13 @@ Business Photos: <br>
 </div>  
 <hr>
 <% business.review.forEach(function(review){ %>
+    author:<%= review.author%><br>
     title: <%= review.title%><br>
     description: <%= review.description%><br>
-    rating: <%= review.rating%>
+    product rating: <%= review.product_rating%><br>
+    ambience rating: <%= review.ambience_rating%><br>
+    service rating: <%= review.service_rating%><br>
+    price rating: <%= review.price_rating%><br>
 <hr>
 <% })%>
 

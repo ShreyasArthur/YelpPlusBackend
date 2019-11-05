@@ -5,7 +5,7 @@ var userScehma = new mongoose.Schema({
     last_name: String,
     email_id: String,
     password: String,
-    reviews: [{type:mongoose.Schema.Types.ObjectId, ref:"Reviews"}],
+    reviews: [{type:mongoose.Schema.Types.ObjectId, ref:"Review"}],
 })
 
 var User = mongoose.model("User", userScehma)
