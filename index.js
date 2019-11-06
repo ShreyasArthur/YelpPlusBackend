@@ -263,7 +263,7 @@ app.get("/search/:word", function(req, res){
         if(err) console.log(err)
         else{
             if(category!=null){
-                Business.find({category: category._id}).populate("category").exec(function(err, business){
+                Business.find({category: category._id},"name address photo",function(err, business){
                     if(err) console.log(err)
                     else{
                         if(business!=null){
@@ -276,14 +276,14 @@ app.get("/search/:word", function(req, res){
             }else{ 
                 SubCategory.findOne({$text: {$search: req.params.word}}, function(err, sub_category){
                     if(sub_category!=null){
-                        Business.find({sub_category: sub_category._id}).populate("sub_category").exec(function(err, newBusiness){
+                        Business.find({sub_category: sub_category._id},"name address photo",function(err, newBusiness){
                             if(err) console.log(err)
                             else{
                                 res.send(newBusiness)
                             }
                         })
                     }else{
-                        Business.find({$text: {$search: req.params.word}}).populate("category").exec(function(err, businessCat){
+                        Business.find({$text: {$search: req.params.word}},"name address photo",function(err, businessCat){
                             if(err) console.log(err)
                             else{
                                 if(businessCat!=null){
