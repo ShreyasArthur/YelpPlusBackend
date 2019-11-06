@@ -341,7 +341,8 @@ app.post("/review/:business_id/:email_id/new", function(req, res){
                             })
                         }
                     })
-                    res.send("ok")
+                    res.status(200)
+                    res.send({"status":"ok"})
                 }
             })
         }
@@ -373,13 +374,26 @@ app.post("/business/:id/claim/:email_id", function(req, res){
                     user.save(function(err){
                         if(err) console.log(err)
                         else{
-                            res.statusCode=200
+                            res.status(200)
                             res.send({"status":"ok"})
                         }
                     })
                 }
             })
         }
+    })
+})
+
+app.post("/business/:id/register/event/:email_id", function(req, res){
+    User.findOne({email_id: req.params.email_id}, function(err, user){
+        if(err) console.log(err)
+        Business.findOneAndUpdate({owner:user._id}, {$set:{event_booking: true}}, function(err, business){
+            if(err) console.log(err)
+            else{
+                res.status(200)
+                res.send({"status":"ok"});
+            }
+        })
     })
 })
 
