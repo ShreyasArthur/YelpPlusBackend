@@ -241,7 +241,7 @@ app.get("/business", function(req, res){
 
 // Route: Get business by category
 app.get("/business/:id", function(req, res){
-    Business.find({category: req.params.id}).populate("sub_category").exec(function(err, business){
+    Business.find({category: req.params.id}).populate("review").exec(function(err, business){
         if(err) console.log(err)
         else{
             res.send(business)
@@ -302,8 +302,7 @@ app.get("/search/:word", function(req, res){
 
 // Route: Get a single business
 app.get("/business/show/:id", function(req, res){
-    var id = req.params.id
-    Business.findById(id).populate("category").populate({path:"review", populate:{path: "business"}}).populate({path: "business"}).exec(function(err, business){
+    Business.findById(req.params.id).populate("category").populate("review").exec(function(err, business){
         if(err) console.log(err)
         else {
             res.send(business)
