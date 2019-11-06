@@ -303,7 +303,7 @@ app.get("/search/:word", function(req, res){
 // Route: Get a single business
 app.get("/business/show/:id", function(req, res){
     var id = req.params.id
-    Business.findById(id).populate("category").populate("review").exec(function(err, business){
+    Business.findById(id).populate("category").populate({path:"review", populate:{path: "business"}}).populate({path: "business"}).exec(function(err, business){
         if(err) console.log(err)
         else {
             res.send(business)
