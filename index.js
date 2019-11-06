@@ -274,20 +274,20 @@ app.get("/search/:word", function(req, res){
                     }
                 })
             }else{ 
-                SubCategory.find({$text: {$search: req.params.word}}, function(err, sub_category){
+                SubCategory.findOne({$text: {$search: req.params.word}}, function(err, sub_category){
                     if(sub_category!=null){
-                        Business.find({sub_category: sub_category._id}, function(err, business){
+                        Business.find({sub_category: sub_category._id}).populate("sub_category").exec(function(err, newBusiness){
                             if(err) console.log(err)
                             else{
-                                res.send(business)
+                                res.send(newBusiness)
                             }
                         })
                     }else{
-                        Business.find({$text: {$search: req.params.word}}).populate("category").exec(function(err, business){
+                        Business.find({$text: {$search: req.params.word}}).populate("category").exec(function(err, businessCat){
                             if(err) console.log(err)
                             else{
-                                if(business!=null){
-                                    res.send(business)
+                                if(businessCat!=null){
+                                    res.send(businessCat)
                                 }else{
                                     res.send("Nothing found")
                                 }
