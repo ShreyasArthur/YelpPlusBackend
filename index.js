@@ -333,6 +333,15 @@ app.post("/review/:business_id/:email_id/new", function(req, res){
                     user.save(function(err){
                         if(err) console.log(err)
                     })   
+                    Business.findOne({_id: req.params.business_id}, function(err, business){
+                        if(err) console.log(err)
+                        else{
+                            business.review.push(newReview)
+                            business.save(function(err){
+                                if(err) console.log(err)
+                            })
+                        }
+                    })
                     res.send("ok")
                 }
             })
