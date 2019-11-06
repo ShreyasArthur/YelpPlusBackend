@@ -241,7 +241,7 @@ app.get("/business", function(req, res){
 
 // Route: Get business by category
 app.get("/business/:id", function(req, res){
-    Business.find({category: req.params.id}, function(err, business){
+    Business.find({category: req.params.id}).populate("sub_category").exec(function(err, business){
         if(err) console.log(err)
         else{
             res.send(business)
