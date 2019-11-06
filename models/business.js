@@ -9,8 +9,15 @@ var businessSchema = new mongoose.Schema({
     category: {type: mongoose.Schema.Types.ObjectId, ref:"Category"},
     review: [{type: mongoose.Schema.Types.ObjectId, ref:"Review"}],
     sub_category: [{type: mongoose.Schema.Types.ObjectId, ref:"SubCategory"}],
-    claimed: Boolean,
+    claimed: {
+        type: Boolean,
+        default: false
+    },
     owner: {type:mongoose.Schema.Types.ObjectId, ref:"User"},
+    event_booking:{
+        type: Boolean,
+        default: false
+    }
 })
 
 businessSchema.index({

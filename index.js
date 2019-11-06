@@ -119,11 +119,14 @@ app.get("/show/:id", function(req, res){
     })
 })
 
-
+// TODO :
+// delete all business
+// check if sub categories are being added
+// work on filters
 
 // Route: Insert New Business
 app.post("/business/new", function(req, res){
-    if(req.body.category == "Restaurants"){
+    if(req.body.category == "5dc10e7b40b34347781b1183"){
         sub_category = req.body.sub_category
     }else{
         sub_category = null
@@ -226,7 +229,6 @@ app.post("/review/new", function(req, res){
         }
     })
 })
-
 
   ////////////////////////
  // Routes For Android //
@@ -346,6 +348,25 @@ app.get("/user/:email_id", function(req, res){
 })
 
 // Claim a business
+app.post("/business/:id/claim/:email_id", function(req, res){
+    User.findOne({email_id: req.params.email_id}, function(err, user){
+        if(err) console.log(err)
+        else{
+            Business.findOneAndUpdate({_id: req.params.id}, {$set:{claimed: true, owner: user}}, function(err, business){
+                if(err) console.log(err)
+                else{
+                    user.owned_business.push(business)
+                    user.save(function(err){
+                        if(err) console.log(err)
+                        else{
+                            res.send("ok")
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
 
 app.listen(port, function(){
     console.log("Server running on port:"+port)

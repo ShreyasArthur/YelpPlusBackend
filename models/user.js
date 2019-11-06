@@ -6,6 +6,7 @@ var userScehma = new mongoose.Schema({
     email_id: String,
     password: String,
     reviews: [{type:mongoose.Schema.Types.ObjectId, ref:"Review"}],
+    owned_business: [{type:mongoose.Schema.Types.ObjectId, ref: "Business"}]
 })
 
 var User = mongoose.model("User", userScehma)
