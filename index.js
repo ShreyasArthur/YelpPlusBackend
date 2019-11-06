@@ -374,7 +374,7 @@ app.post("/business/:id/claim/:email_id", function(req, res){
                         if(err) console.log(err)
                         else{
                             res.statusCode=200
-                            res.send("ok")
+                            res.send({"status":"ok"})
                         }
                     })
                 }
