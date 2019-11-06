@@ -119,11 +119,6 @@ app.get("/show/:id", function(req, res){
     })
 })
 
-// TODO :
-// delete all business
-// check if sub categories are being added
-// work on filters
-
 // Route: Insert New Business
 app.post("/business/new", function(req, res){
     if(req.body.category == "5dc10e7b40b34347781b1183"){
@@ -279,14 +274,25 @@ app.get("/search/:word", function(req, res){
                     }
                 })
             }else{ 
-                Business.find({$text: {$search: req.params.word}}).populate("category").exec(function(err, business){
-                    if(err) console.log(err)
-                    else{
-                        if(business!=null){
-                            res.send(business)
-                        }else{
-                            res.send("Nothing found")
-                        }
+                SubCategory.find({$text: {$search: req.params.word}}, function(err, sub_category){
+                    if(sub_category!=null){
+                        Business.find({sub_category: sub_category._id}, function(err, business){
+                            if(err) console.log(err)
+                            else{
+                                res.send(business)
+                            }
+                        })
+                    }else{
+                        Business.find({$text: {$search: req.params.word}}).populate("category").exec(function(err, business){
+                            if(err) console.log(err)
+                            else{
+                                if(business!=null){
+                                    res.send(business)
+                                }else{
+                                    res.send("Nothing found")
+                                }
+                            }
+                        })
                     }
                 })
             }
