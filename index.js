@@ -130,7 +130,6 @@ app.post("/business/new", function(req, res){
         name: req.body.name,
         address: req.body.address,
         phone_number: req.body.phone_number,
-        image_logo: req.body.image_url,
         category: req.body.category,
         sub_category: sub_category
     }, function(err, newBusiness){
@@ -229,12 +228,15 @@ app.post("/review/new", function(req, res){
  // Routes For Android //
 ///////////////////////
 
+var userRoute = require("./routes/user")
 var businessRoute = require("./routes/business")
 var categoryRoute = require("./routes/category")
+var reviewRoute = require("./routes/review")
 
+app.use("/api/user", userRoute)
 app.use("/api/business", businessRoute)
 app.use("/api/category", categoryRoute)
-
+app.use("/api/review", reviewRoute)
 
 // Route: Write a review
 app.post("/review/:business_id/:email_id/new", function(req, res){
@@ -277,8 +279,7 @@ app.post("/review/:business_id/:email_id/new", function(req, res){
 
 // Route: Get User Profile
 app.get("/user/:email_id", function(req, res){
-    User.
-    findOne({email_id: req.params.email_id}).
+    User.findOne({email_id: req.params.email_id}).
     populate({
         path: "reviews", 
         populate: {path: "business"}
