@@ -13,9 +13,9 @@ var app = express()
 var port = process.env.PORT || 4000
 
 // DB Connection
-mongoose.connect("mongodb://dom:njit1234@ds331558.mlab.com:31558/heroku_5hf0p9gc", {useNewUrlParser: true, useUnifiedTopology: true}, function(error){
-    if(error) console.log(error)
-})
+// mongoose.connect("mongodb://dom:njit1234@ds331558.mlab.com:31558/heroku_5hf0p9gc", {useNewUrlParser: true, useUnifiedTopology: true}, function(error){
+//     if(error) console.log(error)
+// })
 
 // middleware
 app.use(bodyParser.urlencoded({extended: true}))
@@ -229,86 +229,12 @@ app.post("/review/new", function(req, res){
  // Routes For Android //
 ///////////////////////
 
-// Route : Get all businesss
-app.get("/business", function(req, res){
-    Business.find({}, function(err, business){
-        if(err) console.log(err)
-        else{
-            res.send(business)
-        }
-    })
-})
+var businessRoute = require("./routes/business")
+var categoryRoute = require("./routes/category")
 
-// Route: Get business by category
-app.get("/business/:id", function(req, res){
-    Business.find({category: req.params.id},"name address photo",function(err, business){
-        if(err) console.log(err)
-        else{
-            res.send(business)
-        }
-    })
-})
+app.use("/api/business", businessRoute)
+app.use("/api/category", categoryRoute)
 
-// Route: Get All Categories
-app.get("/category", function(req, res){
-    Category.find({}, function(err, categories){
-        if(err) console.log(err)
-        else res.send(categories)
-    })
-})
-
-// Route: Search for business
-app.get("/search/:word", function(req, res){
-    Category.findOne({$text: {$search: req.params.word}}, function(err, category){
-        if(err) console.log(err)
-        else{
-            if(category!=null){
-                Business.find({category: category._id},"name address photo",function(err, business){
-                    if(err) console.log(err)
-                    else{
-                        if(business!=null){
-                            res.send(business)
-                        }else{
-                            res.send("Nothing found")
-                        }
-                    }
-                })
-            }else{ 
-                SubCategory.findOne({$text: {$search: req.params.word}}, function(err, sub_category){
-                    if(sub_category!=null){
-                        Business.find({sub_category: sub_category._id},"name address photo",function(err, newBusiness){
-                            if(err) console.log(err)
-                            else{
-                                res.send(newBusiness)
-                            }
-                        })
-                    }else{
-                        Business.find({$text: {$search: req.params.word}},"name address photo",function(err, businessCat){
-                            if(err) console.log(err)
-                            else{
-                                if(businessCat!=null){
-                                    res.send(businessCat)
-                                }else{
-                                    res.send("Nothing found")
-                                }
-                            }
-                        })
-                    }
-                })
-            }
-        }
-    })
-})
-
-// Route: Get a single business
-app.get("/business/show/:id", function(req, res){
-    Business.findById({_id: req.params.id}).populate("review", "product_rating service_rating ambience_rating price_rating data title description author").exec(function(err, business){
-        if(err) console.log(err)
-        else {
-            res.send(business)
-        }
-    })
-})
 
 // Route: Write a review
 app.post("/review/:business_id/:email_id/new", function(req, res){
