@@ -12,7 +12,7 @@ exports.getAllBusiness = function(req, res){
 }
 
 exports.getBusinessByCategory = function(req, res){
-    db.Business.find({category: req.params.id})
+    db.Business.find({category: req.params.id}, "name address photo")
     .then(function(business){
         res.send(business)
     })
