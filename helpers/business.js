@@ -84,3 +84,44 @@ exports.searchBusiness = function(req, res){
         res.send([])
     })
 }
+
+exports.claimBusiness = function(req, res){
+    db.User.findById(req.params.user_id)
+    .then(function(user){
+        db.Business.findOneAndUpdate({_id: req.params.business_id}, {$set:{claimed: true, owner: user}})
+        .then(function(business){
+            res.status(200)
+            res.send(business)
+        })
+        .catch(function(err){
+            console.log(err)
+            res.send("error")
+        })
+    })
+    .catch(function(err){
+        console.log(err)
+        res.send("error")
+    })
+}
+
+exports.enableEventBooking = function(req, res){
+    db.Business.findOneAndUpdate({_id: req.params.business_id}, {$set:{event_booking_status: true}})
+    .then(function(business){
+        res.status(200)
+        res.send(business)
+    })
+    .catch(function(err){
+        console.log(err)
+        res.send("error")
+    })
+}
+
+exports.getReviewForBusiness = function(req, res){
+    db.Business.findById(req.params.business_id, "review").populate("review")
+    .then(function(review){
+        res.send(review)
+    })
+    .catch(function(err){
+        console.log(err)
+    })
+}

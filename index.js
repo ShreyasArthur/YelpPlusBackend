@@ -238,57 +238,6 @@ app.use("/api/business", businessRoute)
 app.use("/api/category", categoryRoute)
 app.use("/api/review", reviewRoute)
 
-// Route: Write a review
-app.post("/review/:business_id/:email_id/new", function(req, res){
-    User.findOne({email_id: req.params.email_id}, function(err, user){
-        if(err) console.log(err)
-        else{
-            Review.create({
-                author: user.first_name+" "+user.last_name,
-                title: req.body.title,
-                description: req.body.description,
-                product_rating: req.body.product_rating,
-                service_rating: req.body.service_rating,
-                ambience_rating: req.body.ambience_rating,
-                price_rating: req.body.price_rating,
-                date: Date.now(),
-                business: req.params.business_id
-            },function(err, newReview){
-                if(err) console.log(err)
-                else {
-                    user.reviews.push(newReview)
-                    user.save(function(err){
-                        if(err) console.log(err)
-                    })   
-                    Business.findOne({_id: req.params.business_id}, function(err, business){
-                        if(err) console.log(err)
-                        else{
-                            business.review.push(newReview)
-                            business.save(function(err){
-                                if(err) console.log(err)
-                            })
-                        }
-                    })
-                    res.status(200)
-                    res.send({"status":"ok"})
-                }
-            })
-        }
-    })
-})
-
-// Route: Get User Profile
-app.get("/user/:email_id", function(req, res){
-    User.findOne({email_id: req.params.email_id}).
-    populate({
-        path: "reviews", 
-        populate: {path: "business"}
-    }).exec(function(err, user){
-        if(err) console.log(err)
-            res.send(user)
-    })
-})
-
 // Claim a business
 app.post("/business/:id/claim/:email_id", function(req, res){
     User.findOne({email_id: req.params.email_id}, function(err, user){
