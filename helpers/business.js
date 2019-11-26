@@ -90,11 +90,11 @@ exports.claimBusiness = function(req, res){
         db.Business.findOneAndUpdate({_id: req.params.business_id}, {$set:{claimed: true, owner: user}})
         .then(function(business){
             res.status(200)
-            res.send(business)
+            res.send({success: true})
         })
         .catch(function(err){
             console.log(err)
-            res.send("error")
+            res.send({success: false})
         })
     })
     .catch(function(err){
