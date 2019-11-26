@@ -125,3 +125,24 @@ exports.getReviewForBusiness = function(req, res){
         console.log(err)
     })
 }
+
+exports.addImage = function(req, res){
+    db.Business.findById(req.params.business_id)
+    .then(function(business){
+        business.photo.push(req.body.url)
+        business.save(function(err, business){
+            if(err){
+                console.log("error while pushing image to db")
+                res.send({success: false})
+            }
+            else{
+                console.log("success")
+            }
+        })
+        res.send({success: true})
+    })
+    .catch(function(err){
+        console.log(err)
+        res.send({success: false})
+    })
+}

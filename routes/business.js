@@ -9,6 +9,7 @@ router.get("/view/:id", helpers.getABusiness)
 router.get("/search/:word", helpers.searchBusiness)
 router.get("/reviews/:business_id", helpers.getReviewForBusiness)
 
+router.put("/addImage/:business_id", helpers.addImage)
 
 router.put("/claimBusiness/:business_id/:user_id", helpers.claimBusiness)
 router.put("/enableEventBooking/:business_id", helpers.enableEventBooking)

@@ -284,3 +284,8 @@ app.post("/getImage",upload.any(), cloud.uploadImage)
 app.listen(port, function(){
     console.log("Server running on port:"+port)
 })
+
+// TODO:
+// 1. Remove cloudinary integration from here, since we are uploading files directly to the server.
+// 2. Take the uploaded img url from the android app and insert it in the photos url array list for the specific business.
+// 3. Only one image can be uploaded at a time right now, which meets the requirement.
