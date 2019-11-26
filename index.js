@@ -7,6 +7,8 @@ var Business = require("./models/business")
 var Category = require("./models/category")
 var SubCategory = require("./models/subCategory")
 var Review = require("./models/review")
+var cloud = require('./cloudinary')
+var upload = require('./multerConfig')
 
 // variables
 var app = express()
@@ -272,6 +274,12 @@ app.post("/business/:id/register/event/:email_id", function(req, res){
         })
     })
 })
+
+app.get("/checkImage", function(req, res){
+    res.render("imageUpload")
+})
+
+app.post("/getImage",upload.any(), cloud.uploadImage)
 
 app.listen(port, function(){
     console.log("Server running on port:"+port)
