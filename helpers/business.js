@@ -107,11 +107,11 @@ exports.enableEventBooking = function(req, res){
     db.Business.findOneAndUpdate({_id: req.params.business_id}, {$set:{event_booking_status: true}})
     .then(function(business){
         res.status(200)
-        res.send(business)
+        res.send({success : true})
     })
     .catch(function(err){
         console.log(err)
-        res.send("error")
+        res.send({success : false})
     })
 }
 
