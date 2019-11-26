@@ -37,7 +37,7 @@ exports.searchBusiness = function(req, res){
     db.Category.findOne({$text: {$search: req.params.word}})
     .then(function(category){
         if(category!=null){
-            db.Business.find({category: category_id}, "name address photo")
+            db.Business.find({category: category.id}, "name address photo")
             .then(function(business){
                 if(business!=null){
                     res.send(business)
@@ -76,7 +76,6 @@ exports.searchBusiness = function(req, res){
                 console.log(err)
                 res.send([])
             })
-
         }
     })
     .catch(function(err){
@@ -136,10 +135,9 @@ exports.addImage = function(req, res){
                 res.send({success: false})
             }
             else{
-                console.log("success")
+                res.send({success: true})
             }
         })
-        res.send({success: true})
     })
     .catch(function(err){
         console.log(err)
