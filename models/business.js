@@ -5,19 +5,9 @@ var businessSchema = new mongoose.Schema({
     phone_number: Number,
     address: String,
     photo:[String],
-    category: {
-        type: mongoose.Schema.Types.ObjectId, ref:"Category"
-    },
-    review: [
-        {
-            type: mongoose.Schema.Types.ObjectId, ref:"Review"
-        }
-    ],
-    sub_category: [
-        {
-            type: mongoose.Schema.Types.ObjectId, ref:"SubCategory"
-        }
-    ],
+    category: {type: mongoose.Schema.Types.ObjectId, ref:"Category"},
+    review: [{type: mongoose.Schema.Types.ObjectId, ref:"Review"}],
+    sub_category: [{type: mongoose.Schema.Types.ObjectId, ref:"SubCategory"}],
     claimed: {
         type: Boolean,
         default: false
@@ -29,7 +19,8 @@ var businessSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    menu: [],
+    event: [{type:mongoose.Schema.Types.ObjectId, ref:"Events"}],
+    menu: [String],
     locations:{
         lat: Number,
         long: Number

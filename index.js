@@ -1,14 +1,11 @@
 // libraries
 var express = require('express')
-var mongoose = require('mongoose')
 var bodyParser = require('body-parser')
 var User = require('./models/user')
 var Business = require("./models/business")
 var Category = require("./models/category")
 var SubCategory = require("./models/subCategory")
 var Review = require("./models/review")
-var cloud = require('./cloudinary')
-var upload = require('./multerConfig')
 
 // variables
 var app = express()
@@ -234,58 +231,14 @@ var userRoute = require("./routes/user")
 var businessRoute = require("./routes/business")
 var categoryRoute = require("./routes/category")
 var reviewRoute = require("./routes/review")
+var eventRoute = require("./routes/event")
 
 app.use("/api/user", userRoute)
 app.use("/api/business", businessRoute)
 app.use("/api/category", categoryRoute)
 app.use("/api/review", reviewRoute)
-
-// Claim a business
-app.post("/business/:id/claim/:email_id", function(req, res){
-    User.findOne({email_id: req.params.email_id}, function(err, user){
-        if(err) console.log(err)
-        else{
-            Business.findOneAndUpdate({_id: req.params.id}, {$set:{claimed: true, owner: user}}, function(err, business){
-                if(err) console.log(err)
-                else{
-                    user.owned_business.push(business)
-                    user.save(function(err){
-                        if(err) console.log(err)
-                        else{
-                            res.status(200)
-                            res.send({"status":"ok"})
-                        }
-                    })
-                }
-            })
-        }
-    })
-})
-
-app.post("/business/:id/register/event/:email_id", function(req, res){
-    User.findOne({email_id: req.params.email_id}, function(err, user){
-        if(err) console.log(err)
-        Business.findOneAndUpdate({owner:user._id}, {$set:{event_booking: true}}, function(err, business){
-            if(err) console.log(err)
-            else{
-                res.status(200)
-                res.send({"status":"ok"});
-            }
-        })
-    })
-})
-
-app.get("/checkImage", function(req, res){
-    res.render("imageUpload")
-})
-
-app.post("/getImage",upload.any(), cloud.uploadImage)
+app.use("/api/event", eventRoute)
 
 app.listen(port, function(){
     console.log("Server running on port:"+port)
 })
-
-// TODO:
-// 1. Remove cloudinary integration from here, since we are uploading files directly to the server.
-// 2. Take the uploaded img url from the android app and insert it in the photos url array list for the specific business.
-// 3. Only one image can be uploaded at a time right now, which meets the requirement.
