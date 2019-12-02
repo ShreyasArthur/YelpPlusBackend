@@ -24,7 +24,11 @@ var businessSchema = new mongoose.Schema({
     locations:{
         lat: Number,
         long: Number
-    }
+    },
+    avg_product_rating: Number,
+    avg_service_rating: Number,
+    avg_ambience_rating: Number,
+    avg_price_rating: Number,
 })
 
 businessSchema.index({

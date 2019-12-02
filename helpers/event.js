@@ -57,3 +57,13 @@ exports.getEvent = function(req, res){
         console.log(err)
     })
 }
+
+exports.getEventByBusiness = function(req, res){
+    db.Business.findById(req.params.business_id, "menu event").populate("event", "date time")
+    .then(function(business){
+        res.send(business)
+    })
+    .catch(function(err){
+        console.log(err)
+    })
+}

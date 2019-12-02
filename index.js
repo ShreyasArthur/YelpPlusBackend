@@ -130,7 +130,11 @@ app.post("/business/new", function(req, res){
         address: req.body.address,
         phone_number: req.body.phone_number,
         category: req.body.category,
-        sub_category: sub_category
+        sub_category: sub_category,
+        avg_product_rating: 0,
+        avg_service_rating: 0,
+        avg_ambience_rating: 0,
+        avg_price_rating: 0
     }, function(err, newBusiness){
         if(err) console.log(err)
             res.redirect("/business/new")
