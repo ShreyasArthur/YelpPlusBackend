@@ -5,7 +5,7 @@ var eventSchema = new mongoose.Schema({
     time: String,
     user: {type: mongoose.Schema.Types.ObjectId, ref:"User"},
     menu: [String],
-    guest_Count: Number,
+    guest_count: Number,
     business_id: {type:mongoose.Schema.Types.ObjectId, ref:"Business"}
 })
 
