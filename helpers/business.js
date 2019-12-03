@@ -12,7 +12,7 @@ exports.getAllBusiness = function(req, res){
 }
 
 exports.getBusinessByCategory = function(req, res){
-    db.Business.find({category: req.params.id}, "name address photo event_booking_status")
+    db.Business.find({category: req.params.id}, "name address photo event_booking_status avg_price_rating")
     .then(function(business){
         res.send(business)
     })
@@ -37,7 +37,7 @@ exports.searchBusiness = function(req, res){
     db.Category.findOne({$text: {$search: req.params.word}})
     .then(function(category){
         if(category!=null){
-            db.Business.find({category: category.id}, "name address photo event_booking_status")
+            db.Business.find({category: category.id}, "name address photo event_booking_status avg_price_rating")
             .then(function(business){
                 if(business!=null){
                     res.send(business)
@@ -53,7 +53,7 @@ exports.searchBusiness = function(req, res){
             db.SubCategory.findOne({$text: {$search: req.params.word}})
             .then(function(subCategory){
                 if(subCategory != null){
-                    db.Business.find({sub_category: subCategory.id}, "name address photo event_booking_status")
+                    db.Business.find({sub_category: subCategory.id}, "name address photo event_booking_status avg_price_rating")
                     .then(function(business){
                         res.send(business)
                     })
@@ -62,7 +62,7 @@ exports.searchBusiness = function(req, res){
                         res.send([])
                     })
                 }else{
-                    db.Business.find({$text:{$search: req.params.word}}, "name address photo event_booking_status")
+                    db.Business.find({$text:{$search: req.params.word}}, "name address photo event_booking_status avg_price_rating")
                     .then(function(business){
                         res.send(business)
                     })
