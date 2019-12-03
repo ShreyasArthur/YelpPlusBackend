@@ -13,7 +13,7 @@ exports.getUser = function(req, res){
 exports.followUser = function(req, res){
     db.User.findById(req.params.user_id)
     .then(function(user){
-        user.following.push(req.body.secondary_id)
+        user.following.push(req.params.secondary_id)
         user.save(function(err){
             if(err) console.log(err)
             else res.send({success: true})
