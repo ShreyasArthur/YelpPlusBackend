@@ -22,7 +22,7 @@ exports.postReview = function(req, res){
             service_rating: req.body.service_rating,
             ambience_rating: req.body.ambience_rating,
             price_rating: req.body.price_rating,
-            date: new Date() - 60*24*60*60*1000,
+            date: new Date() - 30*24*60*60*1000,
         })
         .then(function(newReview){
             db.Business.findById(req.params.business_id).populate("review")
