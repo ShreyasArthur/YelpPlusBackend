@@ -23,7 +23,7 @@ exports.getBusinessByCategory = function(req, res){
 }
 
 exports.getABusiness = function(req, res){
-    db.Business.findById({_id: req.params.id}, "name phone_number address photo review claimed event_booking_status owner avg_product_rating avg_service_rating avg_ambience_rating avg_price_rating").populate("review", "product_rating service_rating ambience_rating price_rating data title description author").exec()
+    db.Business.findById({_id: req.params.id}, "name phone_number address photo review claimed event_booking_status owner avg_product_rating avg_service_rating avg_ambience_rating avg_price_rating avg_rating").populate("review", "product_rating service_rating ambience_rating price_rating data title description author").exec()
     .then(function(business){
         res.send(business)
     })
