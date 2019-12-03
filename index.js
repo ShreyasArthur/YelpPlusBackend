@@ -134,7 +134,8 @@ app.post("/business/new", function(req, res){
         avg_product_rating: 0,
         avg_service_rating: 0,
         avg_ambience_rating: 0,
-        avg_price_rating: 0
+        avg_price_rating: 0,
+        avg_rating: 0
     }, function(err, newBusiness){
         if(err) console.log(err)
             res.redirect("/business/new")

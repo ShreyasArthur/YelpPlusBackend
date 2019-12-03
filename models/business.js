@@ -25,6 +25,7 @@ var businessSchema = new mongoose.Schema({
         lat: Number,
         long: Number
     },
+    avg_rating: Number,
     avg_product_rating: Number,
     avg_service_rating: Number,
     avg_ambience_rating: Number,

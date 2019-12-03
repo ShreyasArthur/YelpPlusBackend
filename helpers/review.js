@@ -32,8 +32,6 @@ exports.postReview = function(req, res){
                 sum_ambience_rating = 0
                 sum_price_rating = 0
 
-                console.log(business.review.length+1)
-
                 business.review.forEach(review =>{
                     sum_product_rating = sum_product_rating + review.product_rating
                     sum_service_rating = sum_service_rating + review.service_rating
@@ -46,23 +44,24 @@ exports.postReview = function(req, res){
                 sum_ambience_rating = sum_ambience_rating + parseInt(req.body.ambience_rating)
                 sum_price_rating = sum_price_rating + parseInt(req.body.price_rating)
 
-                console.log("Sum Product Rating"+sum_product_rating)
-
                 avg_product_rating = sum_product_rating / (business.review.length+1)
                 avg_service_rating = sum_service_rating / (business.review.length+1)
                 avg_ambience_rating = sum_ambience_rating / (business.review.length+1)
                 avg_price_rating = sum_price_rating / (business.review.length+1)
 
-                console.log("Avg Product Rating"+avg_product_rating)
+                avg_rating = (avg_product_rating+avg_service_rating+avg_ambience_rating) / 3
+
                 business.avg_product_rating = parseInt(avg_product_rating)
                 business.avg_service_rating = parseInt(avg_service_rating)
                 business.avg_ambience_rating = parseInt(avg_ambience_rating)
                 business.avg_price_rating = parseInt(avg_price_rating)
+                business.avg_rating = parseInt(avg_rating)
 
                 business.markModified("avg_product_rating")
                 business.markModified("avg_service_rating")
                 business.markModified("avg_ambience_rating")
                 business.markModified("avg_price_rating")
+                business.markModified("avg_rating")
                 
                 business.review.push(newReview)
 
