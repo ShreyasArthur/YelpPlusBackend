@@ -23,3 +23,13 @@ exports.followUser = function(req, res){
         console.log(err)
     })
 }
+
+exports.getFollowingUsers = function(req, res){
+    db.User.findById(req.params.user_id, "following").populate("following", "first_name last_name")
+    .then(function(user){
+        res.send(user)
+    })
+    .catch(function(err){
+        console.log(err)
+    })
+}
